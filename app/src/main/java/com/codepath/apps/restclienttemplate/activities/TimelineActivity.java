@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import com.codepath.apps.restclienttemplate.TwitterApplication;
 import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.adapters.TweetsArrayAdapter;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
+import com.codepath.apps.restclienttemplate.listeners.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.utils.AppConstants;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -33,8 +35,9 @@ public class TimelineActivity extends AppCompatActivity {
     private ActivityTimelineBinding binding;
 
     private TwitterClient client;
-    private ArrayList<Tweet> tweets;
+    private ArrayList<Tweet> mTweets;
     private TweetsArrayAdapter mAdapter;
+    private long mMaxId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +50,7 @@ public class TimelineActivity extends AppCompatActivity {
         //lvTweets = (ListView) findViewById(R.id.lvTweets);
 
         // Create the arrayList
-        tweets = new ArrayList<>();
+        mTweets = new ArrayList<>();
 
         // Connect adapter to ListView
         //lvTweets.setAdapter(mAdapter);
@@ -57,7 +60,7 @@ public class TimelineActivity extends AppCompatActivity {
         setUpFab();
 
         client = TwitterApplication.getRestClient();
-        populateTimeline();
+        populateTimeline(-1);
     }
 
     private void setUpFab() {
@@ -88,14 +91,33 @@ public class TimelineActivity extends AppCompatActivity {
     private void setUpRecyclerView() {
 
         // Construct the adapter from the data source
-        mAdapter = new TweetsArrayAdapter(this, tweets);
+        mAdapter = new TweetsArrayAdapter(this, mTweets);
         binding.rvTweets.setAdapter(mAdapter);
-        binding.rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        binding.rvTweets.setLayoutManager(linearLayoutManager);
+
+        // IMPLEMENT Endless pagination:
+        //  Pass in instance of EndlessRecyclerViewScrollListener and implement onLoadMore which
+        //  fires whenever a new page needs to be loaded to fill up the list
+        EndlessRecyclerViewScrollListener scrollListener =
+                new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        populateTimeline(mMaxId);
+                    }
+                });
+            }
+        };
+        binding.rvTweets.addOnScrollListener(scrollListener);
     }
 
     // Send an API request to get eth timeline json
     // Fill the ListView by creating the tweet objects from the json
-    private void populateTimeline() {
+    private void populateTimeline(long maxId) {
 
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             // SUCCESS
@@ -110,9 +132,20 @@ public class TimelineActivity extends AppCompatActivity {
                 // Create models and add them to the adapter
                 // Load the model data into ListView
 
+                ArrayList<Tweet> tweets = Tweet.fromJSONArray(json);
 
-                mAdapter.setTweets(Tweet.fromJSONArray(json));
+                // In the case that there are tweets existing, then we are returning results using
+                // maxId, therefore first tweet will be a duplicate of last tweet in mTweets, hence
+                // removal of last tweet
+                if (mAdapter.getItemCount() > 0) {
+                    tweets.remove(0);
+                }
+
+                mAdapter.addTweets(tweets);
                 mAdapter.notifyDataSetChanged();
+
+                // set mMaxId to use for endless pagination
+                mMaxId = tweets.get(tweets.size() - 1).getUid();
 
                 Log.d("DEBUG", mAdapter.toString());
             }
@@ -124,7 +157,7 @@ public class TimelineActivity extends AppCompatActivity {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 Log.d("DEBUG", errorResponse.toString());
             }
-        });
+        }, maxId);
 
     }
 

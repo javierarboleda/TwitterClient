@@ -86,8 +86,8 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
         return mTweets.size();
     }
 
-    public void setTweets(ArrayList<Tweet> tweets) {
-        mTweets = tweets;
+    public void addTweets(ArrayList<Tweet> tweets) {
+        mTweets.addAll(tweets);
     }
 
     public void addNewTweet(Tweet tweet) {

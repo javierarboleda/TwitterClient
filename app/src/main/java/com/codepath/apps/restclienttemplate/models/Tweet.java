@@ -97,6 +97,10 @@ public class Tweet implements Parcelable {
             e.printStackTrace();
         }
 
+        if (relativeDate.startsWith("In")) {
+            relativeDate = "now";
+        }
+
         return relativeDate
                 .replace(" minutes ago", "m")
                 .replace(" minute ago", "m")
