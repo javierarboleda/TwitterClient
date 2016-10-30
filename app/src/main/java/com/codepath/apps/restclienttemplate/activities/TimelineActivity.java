@@ -1,17 +1,22 @@
 package com.codepath.apps.restclienttemplate.activities;
 
+import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
+import android.view.View;
 
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApplication;
 import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.adapters.TweetsArrayAdapter;
+import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.utils.AppConstants;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -21,32 +26,71 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
+import static com.codepath.apps.restclienttemplate.utils.AppConstants.COMPOSE_TWEET_RESULT_CODE;
+
 public class TimelineActivity extends AppCompatActivity {
+
+    private ActivityTimelineBinding binding;
 
     private TwitterClient client;
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter mAdapter;
-    private ListView lvTweets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timeline);
+        //setContentView(R.layout.activity_timeline);
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_timeline);
 
         // find the ListView
-        lvTweets = (ListView) findViewById(R.id.lvTweets);
+        //lvTweets = (ListView) findViewById(R.id.lvTweets);
 
         // Create the arrayList
         tweets = new ArrayList<>();
 
-        // Construct the adapter from the data source
-        mAdapter = new TweetsArrayAdapter(this, tweets);
-
         // Connect adapter to ListView
-        lvTweets.setAdapter(mAdapter);
+        //lvTweets.setAdapter(mAdapter);
+
+        setUpRecyclerView();
+
+        setUpFab();
 
         client = TwitterApplication.getRestClient();
         populateTimeline();
+    }
+
+    private void setUpFab() {
+
+        binding.fabNewTweet.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(TimelineActivity.this, ComposeTweetActivity.class);
+                startActivityForResult(intent, COMPOSE_TWEET_RESULT_CODE);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        // REQUEST_CODE is defined above
+        if (resultCode == RESULT_OK && requestCode == AppConstants.COMPOSE_TWEET_RESULT_CODE) {
+
+            Tweet tweet = data.getParcelableExtra(AppConstants.NEW_TWEET);
+            mAdapter.addNewTweet(tweet);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void setUpRecyclerView() {
+
+        // Construct the adapter from the data source
+        mAdapter = new TweetsArrayAdapter(this, tweets);
+        binding.rvTweets.setAdapter(mAdapter);
+        binding.rvTweets.setLayoutManager(new LinearLayoutManager(this));
     }
 
     // Send an API request to get eth timeline json
@@ -67,13 +111,16 @@ public class TimelineActivity extends AppCompatActivity {
                 // Load the model data into ListView
 
 
-                mAdapter.addAll(Tweet.fromJSONArray(json));
+                mAdapter.setTweets(Tweet.fromJSONArray(json));
+                mAdapter.notifyDataSetChanged();
+
                 Log.d("DEBUG", mAdapter.toString());
             }
 
             // FAILURE
             @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                                  JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 Log.d("DEBUG", errorResponse.toString());
             }

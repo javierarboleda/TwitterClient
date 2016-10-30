@@ -33,8 +33,13 @@
                     android:scheme="oauth"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.TimelineActivity"
+        <activity
+            android:name=".activities.TimelineActivity"
             android:label="@string/home_timeline">
+        </activity>
+        <activity
+            android:name=".activities.ComposeTweetActivity"
+            android:label="@string/compose_tweet">
         </activity>
     </application>
 
