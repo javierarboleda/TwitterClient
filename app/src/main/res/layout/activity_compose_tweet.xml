@@ -24,18 +24,23 @@
         android:layout_alignParentEnd="true"
         android:hint="@string/hint_compose_tweet"
         android:background="@android:color/transparent"
-        />
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"/>
 
     <Button
-        android:text="Button"
+        android:text="@string/btn_tweet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:id="@+id/btnTweet"
-        android:background="@android:color/holo_blue_light"
-        android:onClick="sendTweet"/>
+        android:background="@drawable/shape_round_button"
+        android:onClick="sendTweet"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
+        android:layout_marginBottom="12dp"
+        android:layout_marginRight="16dp"/>
 
     <TextView
         android:text="140"
@@ -47,7 +52,8 @@
         android:id="@+id/tvCharsLeft"
         android:layout_alignTop="@+id/btnTweet"
         android:gravity="center"
-        android:layout_marginRight="8dp"/>
+        android:textColor="@color/blackText"
+        android:layout_marginRight="12dp"/>
 </RelativeLayout>
 
 </layout>
