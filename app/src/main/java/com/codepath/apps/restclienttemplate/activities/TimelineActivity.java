@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate.activities;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -52,8 +53,8 @@ public class TimelineActivity extends AppCompatActivity {
         // Create the arrayList
         mTweets = new ArrayList<>();
 
-        // Connect adapter to ListView
-        //lvTweets.setAdapter(mAdapter);
+        setSupportActionBar(binding.appBar);
+        binding.appBar.setTitleTextColor(Color.WHITE);
 
         setUpRecyclerView();
 
