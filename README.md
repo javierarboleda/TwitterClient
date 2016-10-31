@@ -37,7 +37,7 @@ The following **bonus** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-[Link to Video Walkthrough](https://www.dropbox.com/s/6c84ryxi/app.mp4)
+[Link to Video Walkthrough](https://www.dropbox.com/s/gtedg460svr6itu/2016_10_30_20_20_02.mp4)
 
 GIFs created with [AZ Screen Recorder](https://play.google.com/store/apps/details?id=com.hecorat.screenrecorder.free&hl=en).
 
