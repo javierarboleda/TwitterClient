@@ -7,4 +7,5 @@ package com.codepath.apps.restclienttemplate.utils;
 public class AppConstants {
     public static final int COMPOSE_TWEET_RESULT_CODE = 10;
     public static final String NEW_TWEET = "newTweet";
+    public static final String USER_PROFILE_IMAGE_URL_KEY = "userProfileImageUrlKey";
 }

@@ -6,49 +6,43 @@
     tools:context="com.codepath.apps.restclienttemplate.activities.TimelineActivity">
 
 <android.support.design.widget.CoordinatorLayout
+    android:id="@+id/mainContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar_layout"
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="?colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:fitsSystemWindows="true">
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        >
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginStart="48dp"
-            app:expandedTitleMarginEnd="48dp">
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            >
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/app_bar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:layout_collapseMode="pin" />
+            <ImageView
+                android:id="@+id/ivToolbarUserImage"
+                android:layout_width="30dp"
+                android:layout_height="30dp"/>
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+            <TextView
+                android:id="@+id/tvToolbarTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/toolbarTitleLeftMargin"
+                android:paddingStart="@dimen/toolbarTitleLeftMargin"
+                android:text="@string/home"
+                android:textColor="@android:color/white"
+                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                />
 
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
-
-
-
-    <!--<ListView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_alignParentStart="true"-->
-        <!--android:id="@+id/lvTweets"/>-->
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvTweets"

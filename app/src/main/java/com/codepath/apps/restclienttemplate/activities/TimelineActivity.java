@@ -1,9 +1,10 @@
 package com.codepath.apps.restclienttemplate.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApplication;
 import com.codepath.apps.restclienttemplate.TwitterClient;
@@ -28,6 +30,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.codepath.apps.restclienttemplate.utils.AppConstants.COMPOSE_TWEET_RESULT_CODE;
 
@@ -43,18 +46,13 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_timeline);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_timeline);
-
-        // find the ListView
-        //lvTweets = (ListView) findViewById(R.id.lvTweets);
 
         // Create the arrayList
         mTweets = new ArrayList<>();
 
-        setSupportActionBar(binding.appBar);
-        binding.appBar.setTitleTextColor(Color.WHITE);
+        setUpToolbar();
 
         setUpRecyclerView();
 
@@ -62,6 +60,19 @@ public class TimelineActivity extends AppCompatActivity {
 
         client = TwitterApplication.getRestClient();
         populateTimeline(-1);
+    }
+
+    private void setUpToolbar() {
+        setSupportActionBar(binding.toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String imageUrl = sharedPref.getString(AppConstants.USER_PROFILE_IMAGE_URL_KEY, null);
+
+        Glide.with(this)
+                .load(imageUrl)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .into(binding.ivToolbarUserImage);
     }
 
     private void setUpFab() {
