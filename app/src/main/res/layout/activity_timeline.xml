@@ -42,14 +42,19 @@
 
         </android.support.v7.widget.Toolbar>
 
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayoutTimeline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvTweets"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPagerTimeline"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        />
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabNewTweet"
@@ -58,7 +63,7 @@
         android:layout_height="wrap_content"
         app:fabSize="normal"
         android:layout_margin="16dp"
-        app:layout_anchor="@id/rvTweets"
+        app:layout_anchor="@id/viewPagerTimeline"
         app:layout_anchorGravity="bottom|right|end"
         />
 

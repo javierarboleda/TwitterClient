@@ -53,8 +53,10 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
         holder.binding.tvScreenName.setText(screenName);
         holder.binding.tvRelativeTime.setText(tweet.getRelativeTimeAgo());
 
+        String imageUrl = tweet.getUser().getProfileImageUrl().replace("_normal", "");
+
         Glide.with(mContext)
-                .load(tweet.getUser().getProfileImageUrl())
+                .load(imageUrl)
                 .into(holder.binding.ivProfilePic);
     }
 

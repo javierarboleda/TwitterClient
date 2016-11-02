@@ -5,31 +5,24 @@ import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.R;
-import com.codepath.apps.restclienttemplate.TwitterApplication;
 import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.adapters.MainFragmentPagerAdapter;
 import com.codepath.apps.restclienttemplate.adapters.TweetsArrayAdapter;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
-import com.codepath.apps.restclienttemplate.listeners.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.utils.AppConstants;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.codepath.apps.restclienttemplate.utils.AppConstants.COMPOSE_TWEET_RESULT_CODE;
@@ -54,12 +47,21 @@ public class TimelineActivity extends AppCompatActivity {
 
         setUpToolbar();
 
-        setUpRecyclerView();
-
         setUpFab();
 
-        client = TwitterApplication.getRestClient();
-        populateTimeline(-1);
+        setUpTabLayout();
+    }
+
+    private void setUpTabLayout() {
+
+        // Get the ViewPager and set it's PagerAdapter so that it can display items
+        ViewPager viewPager = binding.viewPagerTimeline;
+        viewPager.setAdapter(
+                new MainFragmentPagerAdapter(getSupportFragmentManager(),TimelineActivity.this));
+
+        // Give the TabLayout the ViewPager
+        TabLayout tabLayout = binding.tabLayoutTimeline;
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     private void setUpToolbar() {
@@ -67,7 +69,8 @@ public class TimelineActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String imageUrl = sharedPref.getString(AppConstants.USER_PROFILE_IMAGE_URL_KEY, null);
+        String imageUrl = sharedPref.getString(AppConstants.USER_PROFILE_IMAGE_URL_KEY, null)
+                .replace("_normal", "");
 
         Glide.with(this)
                 .load(imageUrl)
@@ -100,78 +103,7 @@ public class TimelineActivity extends AppCompatActivity {
         }
     }
 
-    private void setUpRecyclerView() {
 
-        // Construct the adapter from the data source
-        mAdapter = new TweetsArrayAdapter(this, mTweets);
-        binding.rvTweets.setAdapter(mAdapter);
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        binding.rvTweets.setLayoutManager(linearLayoutManager);
-
-        // IMPLEMENT Endless pagination:
-        //  Pass in instance of EndlessRecyclerViewScrollListener and implement onLoadMore which
-        //  fires whenever a new page needs to be loaded to fill up the list
-        EndlessRecyclerViewScrollListener scrollListener =
-                new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                view.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        populateTimeline(mMaxId);
-                    }
-                });
-            }
-        };
-        binding.rvTweets.addOnScrollListener(scrollListener);
-    }
-
-    // Send an API request to get eth timeline json
-    // Fill the ListView by creating the tweet objects from the json
-    private void populateTimeline(long maxId) {
-
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
-            // SUCCESS
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                super.onSuccess(statusCode, headers, json);
-                Log.d("DEBUG", json.toString());
-
-                // JSON here
-                // Deserialize JSON
-                // Create models and add them to the adapter
-                // Load the model data into ListView
-
-                ArrayList<Tweet> tweets = Tweet.fromJSONArray(json);
-
-                // In the case that there are tweets existing, then we are returning results using
-                // maxId, therefore first tweet will be a duplicate of last tweet in mTweets, hence
-                // removal of last tweet
-                if (mAdapter.getItemCount() > 0) {
-                    tweets.remove(0);
-                }
-
-                mAdapter.addTweets(tweets);
-                mAdapter.notifyDataSetChanged();
-
-                // set mMaxId to use for endless pagination
-                mMaxId = tweets.get(tweets.size() - 1).getUid();
-
-                Log.d("DEBUG", mAdapter.toString());
-            }
-
-            // FAILURE
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                                  JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                Log.d("DEBUG", errorResponse.toString());
-            }
-        }, maxId);
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
