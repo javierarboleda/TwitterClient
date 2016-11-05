@@ -49,6 +49,9 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private void setUpToolbar() {
 
+        setSupportActionBar(binding.toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         String followingCount = mUser.getFollowingCount() + "";
         String followersCount = mUser.getFollowersCount() + "";
 
@@ -63,5 +66,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
         binding.tvFollowingCount.setText(followingCount);
         binding.tvFollowersCount.setText(followersCount);
+
+        binding.tvUserName.setText(mUser.getName());
+        binding.tvScreenName.setText("@" + mUser.getScreenName());
     }
 }

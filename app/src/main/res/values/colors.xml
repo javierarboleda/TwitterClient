@@ -2,4 +2,7 @@
 <resources>
     <color name="redText">#FF0000</color>
     <color name="blackText">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="whiteFirstShade">#FAFAFA</color>
+    <color name="WhiteSecondShade">#F7F7F7</color>
 </resources>

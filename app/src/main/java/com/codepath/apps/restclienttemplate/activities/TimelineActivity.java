@@ -8,22 +8,31 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.R;
+import com.codepath.apps.restclienttemplate.TwitterApplication;
 import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.adapters.MainFragmentPagerAdapter;
 import com.codepath.apps.restclienttemplate.adapters.TweetsArrayAdapter;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.fragments.TimelineFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.apps.restclienttemplate.utils.AppConstants;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import cz.msebera.android.httpclient.Header;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.codepath.apps.restclienttemplate.utils.AppConstants.COMPOSE_TWEET_RESULT_CODE;
@@ -89,7 +98,46 @@ public class TimelineActivity extends AppCompatActivity {
                 .into(binding.ivToolbarUserImage);
     }
 
-    public void startUserProfileActivity() {
+    public void startUserProfileActivity(View view) {
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String screenName = sharedPref.getString(AppConstants.USER_PROFILE_SCREEN_NAME_KEY, null);
+
+        TwitterApplication.getRestClient().getUserLookup(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+
+                User user = User.fromJSON(response);
+
+                Intent intent = new Intent(TimelineActivity.this, UserProfileActivity.class);
+                intent.putExtra("user", user);
+                TimelineActivity.this.startActivity(intent);
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+
+                User user = null;
+                try {
+                    user = User.fromJSON(response.getJSONObject(0));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                Intent intent = new Intent(TimelineActivity.this, UserProfileActivity.class);
+                intent.putExtra("user", user);
+                TimelineActivity.this.startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                                  JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Log.d("DEBUG", errorResponse.toString());
+            }
+        }, screenName);
 
     }
 

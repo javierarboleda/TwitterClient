@@ -50,7 +50,8 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
     private void setUpUserCredentials() {
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         String imageUrl = sharedPref.getString(AppConstants.USER_PROFILE_IMAGE_URL_KEY, null);
-        if (imageUrl == null) {
+        String screenName = sharedPref.getString(AppConstants.USER_PROFILE_SCREEN_NAME_KEY, null);
+        if (imageUrl == null || screenName == null) {
             TwitterApplication.getRestClient().getUserCredentials(new JsonHttpResponseHandler() {
 
                 @Override
@@ -62,6 +63,10 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString(AppConstants.USER_PROFILE_IMAGE_URL_KEY,
                             user.getProfileImageUrl());
+                    editor.putString(AppConstants.USER_PROFILE_SCREEN_NAME_KEY,
+                            user.getScreenName());
+                    editor.putLong(AppConstants.USER_PROFILE_UID_KEY,
+                            user.getUid());
                     editor.apply();
                 }
 

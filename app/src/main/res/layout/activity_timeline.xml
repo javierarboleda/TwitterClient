@@ -27,7 +27,8 @@
             <ImageView
                 android:id="@+id/ivToolbarUserImage"
                 android:layout_width="30dp"
-                android:layout_height="30dp"/>
+                android:layout_height="30dp"
+                android:onClick="startUserProfileActivity"/>
 
             <TextView
                 android:id="@+id/tvToolbarTitle"

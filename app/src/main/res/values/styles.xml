@@ -17,8 +17,8 @@
     </style>
 
     <style name="TimelineTabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">#FFFFFF</item>
-        <item name="tabSelectedTextColor">#FFFFFF</item>
+        <item name="tabIndicatorColor">@color/white</item>
+        <item name="tabSelectedTextColor">@color/white</item>
     </style>
 
 
@@ -30,12 +30,12 @@
 
     <style name="userProfileCountTextViews" parent="userProfileTextViews">
         <item name="android:layout_marginLeft">6dp</item>
-        <item name="android:textColor">#FAFAFA</item>
+        <item name="android:textColor">@color/whiteFirstShade</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="userProfileFollowLabelTextViews" parent="userProfileTextViews">
-        <item name="android:textColor">#F7F7F7</item>
+        <item name="android:textColor">@color/WhiteSecondShade</item>
         <item name="android:layout_marginLeft">4dp</item>
     </style>
 
