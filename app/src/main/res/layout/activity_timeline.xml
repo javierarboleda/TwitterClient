@@ -45,7 +45,8 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayoutTimeline"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            style="@style/TimelineTabLayout"/>
 
     </android.support.design.widget.AppBarLayout>
 

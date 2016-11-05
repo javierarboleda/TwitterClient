@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.codepath.apps.restclienttemplate.activities.UserProfileActivity">
+
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/mainContent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true">
+
+                <ImageView
+                    android:id="@+id/ivBackgroundImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/backgroundImageHeight"
+                    android:scaleType="centerCrop"
+                    android:layout_alignParentTop="true"/>
+
+                <ImageView
+                    android:id="@+id/ivUserProfileImage"
+                    android:layout_width="@dimen/userProfileImageSize"
+                    android:layout_height="@dimen/userProfileImageSize"
+                    android:layout_alignLeft="@id/ivBackgroundImage"
+                    android:layout_alignStart="@id/ivBackgroundImage"
+                    android:layout_alignBottom="@id/ivBackgroundImage"
+                    android:layout_margin="@dimen/userProfileImageMargin"
+                    android:background="#FFFFFF" />
+
+                <TextView
+                    android:id="@+id/tvFollowingCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/userProfileCountTextViews"/>
+
+                <TextView
+                    android:id="@+id/tvFollowingLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/followingLabel"
+                    style="@style/userProfileFollowLabelTextViews"
+                    android:layout_toRightOf="@id/tvFollowingCount"/>
+
+                <TextView
+                    android:id="@+id/tvFollowersCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/userProfileFollowersCountLeftMargin"
+                    style="@style/userProfileCountTextViews"
+                    android:layout_toRightOf="@id/tvFollowingLabel"/>
+
+                <TextView
+                    android:id="@+id/tvFollowersLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/followersLabel"
+                    style="@style/userProfileFollowLabelTextViews"
+                    android:layout_toRightOf="@id/tvFollowersCount"/>
+
+            </RelativeLayout>
+
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_collapseMode="pin" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/fragmentPlaceholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    </FrameLayout>
+
+</android.support.design.widget.CoordinatorLayout>
+
+</layout>

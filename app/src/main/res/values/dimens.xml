@@ -4,5 +4,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="toolbarTitleLeftMargin">12dp</dimen>
+    <dimen name="backgroundImageHeight">150dp</dimen>
+    <dimen name="userProfileImageSize">80dp</dimen>
+    <dimen name="userProfileImageMargin">8dp</dimen>
+    <dimen name="userProfileFollowersCountLeftMargin">16dp</dimen>
 
 </resources>

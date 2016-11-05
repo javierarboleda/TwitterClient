@@ -16,12 +16,21 @@ public class User implements Parcelable{
     private long uid;
     private String screenName;
     private String profileImageUrl;
+    private String profileBackgroundImageUrl;
+    private long followingCount;
+    private long followersCount;
+    private String description;
+
 
     private User(Parcel in) {
         name = in.readString();
         uid = in.readLong();
         screenName = in.readString();
         profileImageUrl = in.readString();
+        profileBackgroundImageUrl = in.readString();
+        followingCount = in.readLong();
+        followersCount = in.readLong();
+        description = in.readString();
     }
 
     @Override
@@ -30,6 +39,10 @@ public class User implements Parcelable{
         out.writeLong(uid);
         out.writeString(screenName);
         out.writeString(profileImageUrl);
+        out.writeString(profileBackgroundImageUrl);
+        out.writeLong(followingCount);
+        out.writeLong(followersCount);
+        out.writeString(description);
     }
 
     public User() {
@@ -46,6 +59,10 @@ public class User implements Parcelable{
             user.uid = jsonObject.getLong("id");
             user.screenName = jsonObject.getString("screen_name");
             user.profileImageUrl = jsonObject.getString("profile_image_url");
+            user.profileBackgroundImageUrl = jsonObject.getString("profile_banner_url");
+            user.followingCount = jsonObject.getLong("friends_count");
+            user.followersCount = jsonObject.getLong("followers_count");
+            user.description = jsonObject.getString("description");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -67,6 +84,22 @@ public class User implements Parcelable{
 
     public String getProfileImageUrl() {
         return profileImageUrl;
+    }
+
+    public String getProfileBackgroundImageUrl() {
+        return profileBackgroundImageUrl;
+    }
+
+    public long getFollowingCount() {
+        return followingCount;
+    }
+
+    public long getFollowersCount() {
+        return followersCount;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     @Override

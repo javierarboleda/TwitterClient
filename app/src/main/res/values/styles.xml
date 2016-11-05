@@ -16,4 +16,27 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style name="TimelineTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">#FFFFFF</item>
+        <item name="tabSelectedTextColor">#FFFFFF</item>
+    </style>
+
+
+    <style name="userProfileTextViews">
+        <item name="android:layout_below">@id/ivBackgroundImage</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
+    <style name="userProfileCountTextViews" parent="userProfileTextViews">
+        <item name="android:layout_marginLeft">6dp</item>
+        <item name="android:textColor">#FAFAFA</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="userProfileFollowLabelTextViews" parent="userProfileTextViews">
+        <item name="android:textColor">#F7F7F7</item>
+        <item name="android:layout_marginLeft">4dp</item>
+    </style>
+
 </resources>

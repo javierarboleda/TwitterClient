@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate.fragments;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -39,6 +40,9 @@ public class TimelineFragment extends Fragment {
     private TweetsArrayAdapter mAdapter;
     private ArrayList<Tweet> mTweets;
     private long mMaxId;
+    private String mTimelineType;
+    private long mUserId;
+    private String mScreenName;
 
     public static TimelineFragment newInstance() {
         return new TimelineFragment();
@@ -47,6 +51,7 @@ public class TimelineFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
+        Log.d("LIFECYCLE", "TimelineFragment.onCreate");
         super.onCreate(savedInstanceState);
 
         // Create the arrayList
@@ -60,6 +65,7 @@ public class TimelineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
+        Log.d("LIFECYCLE", "TimelineFragment.onCreateView");
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_timeline, container, false);
 
         return binding.getRoot();
@@ -68,6 +74,7 @@ public class TimelineFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
+        Log.d("LIFECYCLE", "TimelineFragment.onViewCreated");
         super.onViewCreated(view, savedInstanceState);
 
         setUpRecyclerView();
@@ -107,47 +114,137 @@ public class TimelineFragment extends Fragment {
     // Fill the ListView by creating the tweet objects from the json
     private void populateTimeline(long maxId) {
 
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
-            // SUCCESS
+        switch (mTimelineType) {
+            case "home":
+                client.getHomeTimeline(new JsonHttpResponseHandler() {
+                    // SUCCESS
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                super.onSuccess(statusCode, headers, json);
-                Log.d("DEBUG", json.toString());
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+                        super.onSuccess(statusCode, headers, json);
+                        addTweetsToAdapter(json);
+                    }
 
-                // JSON here
-                // Deserialize JSON
-                // Create models and add them to the adapter
-                // Load the model data into ListView
+                    // FAILURE
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                                          JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        Log.d("DEBUG", errorResponse.toString());
+                    }
+                }, maxId);
+                break;
+            case "mentions":
 
-                ArrayList<Tweet> tweets = Tweet.fromJSONArray(json);
+                client.getMentionsTimeline(new JsonHttpResponseHandler() {
+                    // SUCCESS
 
-                // In the case that there are tweets existing, then we are returning results using
-                // maxId, therefore first tweet will be a duplicate of last tweet in mTweets, hence
-                // removal of last tweet
-                if (mAdapter.getItemCount() > 0) {
-                    tweets.remove(0);
-                }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+                        super.onSuccess(statusCode, headers, json);
+                        addTweetsToAdapter(json);
+                    }
 
-                mAdapter.addTweets(tweets);
-                mAdapter.notifyDataSetChanged();
+                    // FAILURE
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                                          JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        Log.d("DEBUG", errorResponse.toString());
+                    }
+                }, maxId);
+                break;
+            default:
+                client.getUserTimeline(new JsonHttpResponseHandler() {
+                    // SUCCESS
 
-                // set mMaxId to use for endless pagination
-                mMaxId = tweets.get(tweets.size() - 1).getUid();
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+                        super.onSuccess(statusCode, headers, json);
+                        addTweetsToAdapter(json);
+                    }
 
-                Log.d("DEBUG", mAdapter.toString());
-            }
+                    // FAILURE
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                                          JSONObject errorResponse) {
+                        super.onFailure(statusCode, headers, throwable, errorResponse);
+                        Log.d("DEBUG", errorResponse.toString());
+                    }
+                }, maxId, mUserId, mScreenName);
+                break;
+        }
 
-            // FAILURE
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                                  JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-                Log.d("DEBUG", errorResponse.toString());
-            }
-        }, maxId);
+
 
     }
 
+    private void addTweetsToAdapter(JSONArray json) {
+        Log.d("DEBUG", json.toString());
 
+        // JSON here
+        // Deserialize JSON
+        // Create models and add them to the adapter
+        // Load the model data into ListView
+
+        ArrayList<Tweet> tweets = Tweet.fromJSONArray(json);
+
+        // In the case that there are tweets existing, then we are returning results using
+        // maxId, therefore first tweet will be a duplicate of last tweet in mTweets, hence
+        // removal of last tweet
+        if (mAdapter.getItemCount() > 0) {
+            tweets.remove(0);
+        }
+
+        mAdapter.addTweets(tweets);
+        mAdapter.notifyDataSetChanged();
+
+        // set mMaxId to use for endless pagination
+        if (tweets.size() > 1) {
+            mMaxId = tweets.get(tweets.size() - 1).getUid();
+        }
+
+        Log.d("DEBUG", mAdapter.toString());
+    }
+
+
+    public void addNewTweetToTimeline(Tweet newTweet) {
+
+        mAdapter.addNewTweet(newTweet);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public void setTimelineType(String timelineType) {
+        mTimelineType = timelineType;
+    }
+
+    public void setTimelineType(String timelineType, long userId, String screenName) {
+        mTimelineType = timelineType;
+        mUserId = userId;
+        mScreenName = screenName;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d("LIFECYCLE", "TimelineFragment.onAttach");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d("LIFECYCLE", "TimelineFragment.onDestroyView");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("LIFECYCLE", "TimelineFragment.onDestroy");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d("LIFECYCLE", "TimelineFragment.onDetach");
+    }
 }

@@ -56,6 +56,56 @@ public class TwitterClient extends OAuthBaseClient {
         getClient().get(apiUrl, params, handler);
     }
 
+    public void getMentionsTimeline(AsyncHttpResponseHandler handler, long maxId) {
+
+        String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+
+        // Specify the params
+        RequestParams params = new RequestParams();
+        params.put("count", 25);
+        // show us tweets from the beginning
+        params.put("since_id", 1);
+        // return results with an ID less than (i.e., older than( or equal to given ID
+        if (maxId != -1) {
+            params.put("max_id", maxId);
+        }
+
+        // Execute the request
+        getClient().get(apiUrl, params, handler);
+    }
+
+	public void getUserTimeline(AsyncHttpResponseHandler handler, long maxId, long userId,
+                                String screenName) {
+
+		String apiUrl = getApiUrl("statuses/user_timeline.json");
+
+		// Specify the params
+		RequestParams params = new RequestParams();
+		params.put("count", 25);
+        params.put("user_id", userId);
+        params.put("screen_name", screenName);
+        // show us tweets from the beginning
+		params.put("since_id", 1);
+		// return results with an ID less than (i.e., older than( or equal to given ID
+		if (maxId != -1) {
+			params.put("max_id", maxId);
+		}
+
+		// Execute the request
+		getClient().get(apiUrl, params, handler);
+	}
+
+	public void getUserLookup(AsyncHttpResponseHandler handler, String user) {
+
+		String apiUrl = getApiUrl("users/lookup.json");
+
+		// Specify the params
+		RequestParams params = new RequestParams();
+		params.put("screen_name", user);
+		// Execute the request
+		getClient().get(apiUrl, params, handler);
+	}
+
 	// GET: account/verify_credentials.json
 	//   get user credentials
 	public void getUserCredentials(AsyncHttpResponseHandler handler) {

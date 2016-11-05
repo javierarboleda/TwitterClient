@@ -33,13 +33,14 @@
                     android:scheme="oauth"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.TimelineActivity" >
+        <activity android:name=".activities.TimelineActivity">
         </activity>
         <activity
             android:name=".activities.ComposeTweetActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            android:label="@string/compose_tweet">
+            android:label="@string/compose_tweet"
+            android:windowSoftInputMode="stateVisible|adjustResize">
+        </activity>
+        <activity android:name=".activities.UserProfileActivity">
         </activity>
     </application>
 

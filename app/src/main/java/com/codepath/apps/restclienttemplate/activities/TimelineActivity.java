@@ -18,6 +18,7 @@ import com.codepath.apps.restclienttemplate.TwitterClient;
 import com.codepath.apps.restclienttemplate.adapters.MainFragmentPagerAdapter;
 import com.codepath.apps.restclienttemplate.adapters.TweetsArrayAdapter;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
+import com.codepath.apps.restclienttemplate.fragments.TimelineFragment;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.utils.AppConstants;
 
@@ -35,6 +36,9 @@ public class TimelineActivity extends AppCompatActivity {
     private ArrayList<Tweet> mTweets;
     private TweetsArrayAdapter mAdapter;
     private long mMaxId;
+
+    private MainFragmentPagerAdapter mPagerAdapter;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +59,16 @@ public class TimelineActivity extends AppCompatActivity {
     private void setUpTabLayout() {
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
-        ViewPager viewPager = binding.viewPagerTimeline;
-        viewPager.setAdapter(
-                new MainFragmentPagerAdapter(getSupportFragmentManager(),TimelineActivity.this));
+        mViewPager = binding.viewPagerTimeline;
+
+        mPagerAdapter =
+                new MainFragmentPagerAdapter(getSupportFragmentManager(),TimelineActivity.this);
+
+        mViewPager.setAdapter(mPagerAdapter);
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = binding.tabLayoutTimeline;
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(mViewPager);
     }
 
     private void setUpToolbar() {
@@ -69,13 +76,21 @@ public class TimelineActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String imageUrl = sharedPref.getString(AppConstants.USER_PROFILE_IMAGE_URL_KEY, null)
-                .replace("_normal", "");
+        String imageUrl = sharedPref.getString(AppConstants.USER_PROFILE_IMAGE_URL_KEY, null);
+
+        if (imageUrl != null) {
+            imageUrl = imageUrl.replace("_normal", "");
+        }
+
 
         Glide.with(this)
                 .load(imageUrl)
                 .bitmapTransform(new CropCircleTransformation(this))
                 .into(binding.ivToolbarUserImage);
+    }
+
+    public void startUserProfileActivity() {
+
     }
 
     private void setUpFab() {
@@ -98,8 +113,14 @@ public class TimelineActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == AppConstants.COMPOSE_TWEET_RESULT_CODE) {
 
             Tweet tweet = data.getParcelableExtra(AppConstants.NEW_TWEET);
-            mAdapter.addNewTweet(tweet);
-            mAdapter.notifyDataSetChanged();
+
+            TimelineFragment fragment = (TimelineFragment)
+                    mPagerAdapter.getRegisteredFragment(mViewPager.getCurrentItem());
+
+            fragment.addNewTweetToTimeline(tweet);
+//
+//            mAdapter.addNewTweet(tweet);
+//            mAdapter.notifyDataSetChanged();
         }
     }
 
