@@ -12,5 +12,6 @@
     <string name="home">Timeline</string>
     <string name="followingLabel">FOLLOWING</string>
     <string name="followersLabel">FOLLOWERS</string>
+    <string name="snackbarNoConnectivityText">No connectivity! Please connect to network and try again.</string>
 
 </resources>

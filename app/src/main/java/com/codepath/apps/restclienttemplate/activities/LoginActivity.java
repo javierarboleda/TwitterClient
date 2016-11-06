@@ -2,8 +2,10 @@ package com.codepath.apps.restclienttemplate.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -11,7 +13,9 @@ import android.view.View;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApplication;
 import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.databinding.ActivityLoginBinding;
 import com.codepath.apps.restclienttemplate.models.User;
+import com.codepath.apps.restclienttemplate.network.Connectivity;
 import com.codepath.apps.restclienttemplate.utils.AppConstants;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -22,11 +26,14 @@ import cz.msebera.android.httpclient.Header;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
+    ActivityLoginBinding binding;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_login);
-	}
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
+    }
 
 
 	// Inflate the menu; this adds items to the action bar if it is present.
@@ -74,7 +81,9 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable,
                                       JSONObject errorResponse) {
                     super.onFailure(statusCode, headers, throwable, errorResponse);
-                    Log.d("DEBUG", errorResponse.toString());
+                    if (errorResponse != null) {
+                        Log.d("DEBUG", errorResponse.toString());
+                    }
                 }
 
             });
@@ -92,7 +101,14 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 	// Uses the client to initiate OAuth authorization
 	// This should be tied to a button used to login
 	public void loginToRest(View view) {
-		getClient().connect();
+
+        if (!Connectivity.isNetworkAvailable(this) | !Connectivity.isOnline()) {
+            Snackbar.make(binding.mainView, R.string.snackbarNoConnectivityText,
+                    Snackbar.LENGTH_LONG)
+                    .show();
+        } else {
+            getClient().connect();
+        }
 	}
 
 }

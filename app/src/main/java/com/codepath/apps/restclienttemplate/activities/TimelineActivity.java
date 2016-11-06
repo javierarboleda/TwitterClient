@@ -135,7 +135,9 @@ public class TimelineActivity extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable,
                                   JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
-                Log.d("DEBUG", errorResponse.toString());
+                if (errorResponse != null) {
+                    Log.d("DEBUG", errorResponse.toString());
+                }
             }
         }, screenName);
 

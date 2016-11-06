@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,7 @@ import com.codepath.apps.restclienttemplate.adapters.TweetsArrayAdapter;
 import com.codepath.apps.restclienttemplate.databinding.FragmentTimelineBinding;
 import com.codepath.apps.restclienttemplate.listeners.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.network.Connectivity;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -114,6 +116,12 @@ public class TimelineFragment extends Fragment {
     // Fill the ListView by creating the tweet objects from the json
     private void populateTimeline(long maxId) {
 
+        if (!Connectivity.isNetworkAvailable(getContext()) | !Connectivity.isOnline()) {
+            Snackbar.make(binding.rvTweets, R.string.snackbarNoConnectivityText,
+                    Snackbar.LENGTH_LONG)
+                    .show();
+        }
+
         switch (mTimelineType) {
             case "home":
                 client.getHomeTimeline(new JsonHttpResponseHandler() {
@@ -130,7 +138,9 @@ public class TimelineFragment extends Fragment {
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable,
                                           JSONObject errorResponse) {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
-                        Log.d("DEBUG", errorResponse.toString());
+                        if (errorResponse != null) {
+                            Log.d("DEBUG", errorResponse.toString());
+                        }
                     }
                 }, maxId);
                 break;
@@ -150,7 +160,9 @@ public class TimelineFragment extends Fragment {
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable,
                                           JSONObject errorResponse) {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
-                        Log.d("DEBUG", errorResponse.toString());
+                        if (errorResponse != null) {
+                            Log.d("DEBUG", errorResponse.toString());
+                        }
                     }
                 }, maxId);
                 break;
@@ -169,7 +181,9 @@ public class TimelineFragment extends Fragment {
                     public void onFailure(int statusCode, Header[] headers, Throwable throwable,
                                           JSONObject errorResponse) {
                         super.onFailure(statusCode, headers, throwable, errorResponse);
-                        Log.d("DEBUG", errorResponse.toString());
+                        if (errorResponse != null) {
+                            Log.d("DEBUG", errorResponse.toString());
+                        }
                     }
                 }, maxId, mUserId, mScreenName);
                 break;
