@@ -18,6 +18,7 @@ import com.codepath.apps.restclienttemplate.utils.AppConstants;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -80,7 +81,7 @@ public class ComposeTweetActivity extends AppCompatActivity {
                 Tweet newTweet = Tweet.fromJSON(json);
 
                 Intent data = new Intent();
-                data.putExtra(AppConstants.NEW_TWEET, newTweet);
+                data.putExtra(AppConstants.NEW_TWEET, Parcels.wrap(newTweet));
 
                 setResult(RESULT_OK, data);
                 finish();

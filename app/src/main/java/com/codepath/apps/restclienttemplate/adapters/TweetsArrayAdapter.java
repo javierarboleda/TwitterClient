@@ -14,6 +14,8 @@ import com.codepath.apps.restclienttemplate.activities.UserProfileActivity;
 import com.codepath.apps.restclienttemplate.databinding.ItemTweetBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +68,7 @@ public class TweetsArrayAdapter extends RecyclerView.Adapter<TweetsArrayAdapter.
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, UserProfileActivity.class);
-                intent.putExtra("user", tweet.getUser());
+                intent.putExtra("user", Parcels.wrap(tweet.getUser()));
                 mContext.startActivity(intent);
             }
         });

@@ -1,7 +1,5 @@
 package com.codepath.apps.restclienttemplate.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.text.format.DateUtils;
 
 import org.json.JSONArray;
@@ -18,27 +16,13 @@ import java.util.Locale;
  */
 
 // Parse the JSON + Store the data, encapsulate state logic or display logic
-public class Tweet implements Parcelable {
+@org.parceler.Parcel
+public class Tweet {
     // list out the attributes
-    private String body;
-    private long uid; // unique id for the tweet
-    private User user;
-    private String createdAt;
-
-    private Tweet(Parcel in) {
-        body = in.readString();
-        uid = in.readLong();
-        user = in.readParcelable(User.class.getClassLoader());
-        createdAt = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel out, int i) {
-        out.writeString(body);
-        out.writeLong(uid);
-        out.writeParcelable(user, i);
-        out.writeString(createdAt);
-    }
+    String body;
+    long uid; // unique id for the tweet
+    User user;
+    String createdAt;
 
     public Tweet() {
 
@@ -126,27 +110,5 @@ public class Tweet implements Parcelable {
     public User getUser() {
         return user;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Parcelable.Creator<Tweet> CREATOR
-            = new Parcelable.Creator<Tweet>() {
-
-        // This simply calls our new constructor (typically private) and
-        // passes along the unmarshalled `Parcel`, and then returns the new object!
-        @Override
-        public Tweet createFromParcel(Parcel in) {
-            return new Tweet(in);
-        }
-
-        // We just need to copy this and change the type to match our class.
-        @Override
-        public Tweet[] newArray(int size) {
-            return new Tweet[size];
-        }
-    };
 
 }

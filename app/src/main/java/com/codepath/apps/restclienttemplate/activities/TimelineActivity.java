@@ -29,6 +29,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -111,7 +112,7 @@ public class TimelineActivity extends AppCompatActivity {
                 User user = User.fromJSON(response);
 
                 Intent intent = new Intent(TimelineActivity.this, UserProfileActivity.class);
-                intent.putExtra("user", user);
+                intent.putExtra("user", Parcels.wrap(user));
                 TimelineActivity.this.startActivity(intent);
             }
 
@@ -127,7 +128,7 @@ public class TimelineActivity extends AppCompatActivity {
                 }
 
                 Intent intent = new Intent(TimelineActivity.this, UserProfileActivity.class);
-                intent.putExtra("user", user);
+                intent.putExtra("user", Parcels.wrap(user));
                 TimelineActivity.this.startActivity(intent);
             }
 
@@ -162,7 +163,7 @@ public class TimelineActivity extends AppCompatActivity {
         // REQUEST_CODE is defined above
         if (resultCode == RESULT_OK && requestCode == AppConstants.COMPOSE_TWEET_RESULT_CODE) {
 
-            Tweet tweet = data.getParcelableExtra(AppConstants.NEW_TWEET);
+            Tweet tweet = Parcels.unwrap(data.getParcelableExtra(AppConstants.NEW_TWEET));
 
             TimelineFragment fragment = (TimelineFragment)
                     mPagerAdapter.getRegisteredFragment(mViewPager.getCurrentItem());

@@ -14,6 +14,8 @@ import com.codepath.apps.restclienttemplate.databinding.ActivityUserProfileBindi
 import com.codepath.apps.restclienttemplate.fragments.TimelineFragment;
 import com.codepath.apps.restclienttemplate.models.User;
 
+import org.parceler.Parcels;
+
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class UserProfileActivity extends AppCompatActivity {
@@ -27,7 +29,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_user_profile);
 
-        mUser = getIntent().getParcelableExtra("user");
+        mUser = Parcels.unwrap(getIntent().getParcelableExtra("user"));
 
         setUpToolbar();
 

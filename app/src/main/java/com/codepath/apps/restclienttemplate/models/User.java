@@ -1,8 +1,5 @@
 package com.codepath.apps.restclienttemplate.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,40 +7,17 @@ import org.json.JSONObject;
  * Created on 10/27/16.
  */
 
-public class User implements Parcelable{
+@org.parceler.Parcel
+public class User{
     // list attributes
-    private String name;
-    private long uid;
-    private String screenName;
-    private String profileImageUrl;
-    private String profileBackgroundImageUrl;
-    private long followingCount;
-    private long followersCount;
-    private String description;
-
-
-    private User(Parcel in) {
-        name = in.readString();
-        uid = in.readLong();
-        screenName = in.readString();
-        profileImageUrl = in.readString();
-        profileBackgroundImageUrl = in.readString();
-        followingCount = in.readLong();
-        followersCount = in.readLong();
-        description = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel out, int i) {
-        out.writeString(name);
-        out.writeLong(uid);
-        out.writeString(screenName);
-        out.writeString(profileImageUrl);
-        out.writeString(profileBackgroundImageUrl);
-        out.writeLong(followingCount);
-        out.writeLong(followersCount);
-        out.writeString(description);
-    }
+    String name;
+    long uid;
+    String screenName;
+    String profileImageUrl;
+    String profileBackgroundImageUrl;
+    long followingCount;
+    long followersCount;
+    String description;
 
     public User() {
 
@@ -101,26 +75,5 @@ public class User implements Parcelable{
     public String getDescription() {
         return description;
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Parcelable.Creator<User> CREATOR
-            = new Parcelable.Creator<User>() {
-
-        // This simply calls our new constructor (typically private) and
-        // passes along the unmarshalled `Parcel`, and then returns the new object!
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        // We just need to copy this and change the type to match our class.
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
+    
 }
