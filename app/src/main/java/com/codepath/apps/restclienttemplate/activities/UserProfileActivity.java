@@ -2,7 +2,10 @@ package com.codepath.apps.restclienttemplate.activities;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -29,7 +32,6 @@ public class UserProfileActivity extends AppCompatActivity {
         setUpToolbar();
 
         setUpFragment();
-
     }
 
     private void setUpFragment() {
@@ -64,10 +66,32 @@ public class UserProfileActivity extends AppCompatActivity {
                 .bitmapTransform(new RoundedCornersTransformation(this, 30, 5))
                 .into(binding.ivUserProfileImage);
 
+        binding.tvDescription.setText(mUser.getDescription());
+
         binding.tvFollowingCount.setText(followingCount);
         binding.tvFollowersCount.setText(followersCount);
 
         binding.tvUserName.setText(mUser.getName());
         binding.tvScreenName.setText("@" + mUser.getScreenName());
+
+        binding.tvUserNameMain.setText(mUser.getName());
+        binding.tvScreenNameMain.setText("@" + mUser.getScreenName());
+
+        // code borrowed from http://stackoverflow.com/a/31602120/3850772
+        //
+        // This allows the toolbar alpha to animate in and out on toolbar collapse
+        final CollapsingToolbarLayout collapsingToolbar = binding.collapsingToolbar;
+        AppBarLayout.OnOffsetChangedListener listener = new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if(collapsingToolbar.getHeight() +
+                        verticalOffset < 2 * ViewCompat.getMinimumHeight(collapsingToolbar)) {
+                    binding.toolbar.animate().alpha(1).setDuration(300);
+                } else {
+                    binding.toolbar.animate().alpha(0).setDuration(300);
+                }
+            }
+        };
+        binding.appBar.addOnOffsetChangedListener(listener);
     }
 }

@@ -19,23 +19,26 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:fitsSystemWindows="true">
 
-
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="48dp"
+            app:contentScrim="?attr/colorPrimary" >
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:fitsSystemWindows="true">
 
                 <ImageView
                     android:id="@+id/ivBackgroundImage"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/backgroundImageHeight"
+                    android:layout_marginBottom="6dp"
                     android:scaleType="centerCrop"
                     android:layout_alignParentTop="true"/>
 
@@ -48,6 +51,45 @@
                     android:layout_alignBottom="@id/ivBackgroundImage"
                     android:layout_margin="@dimen/userProfileImageMargin"
                     android:background="#FFFFFF" />
+
+
+                <TextView
+                    android:id="@+id/tvUserNameMain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ivUserProfileImage"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/whiteFirstShade"
+                    />
+
+                <TextView
+                    android:id="@+id/tvScreenNameMain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ivUserProfileImage"
+                    android:layout_toRightOf="@id/tvUserNameMain"
+                    android:layout_toEndOf="@id/tvUserNameMain"
+                    android:layout_alignBottom="@id/tvUserNameMain"
+                    android:gravity="bottom"
+                    android:layout_marginLeft="@dimen/userProfileTvScreenNameMarginLeft"
+                    android:layout_marginStart="@dimen/userProfileTvScreenNameMarginLeft"
+                    android:textSize="14sp"
+                    android:fontFamily="monospace"
+                    android:textColor="@color/WhiteSecondShade"
+                    />
+
+
+                <TextView
+                    android:id="@+id/tvDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvUserNameMain"
+                    android:layout_margin="6dp"/>
 
                 <TextView
                     android:id="@+id/tvFollowingCount"
@@ -81,50 +123,48 @@
 
             </RelativeLayout>
 
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                android:alpha="0">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    >
+
+                    <TextView
+                        android:id="@+id/tvUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/whiteFirstShade"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvScreenName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/userProfileTvScreenNameMarginLeft"
+                        android:layout_marginStart="@dimen/userProfileTvScreenNameMarginLeft"
+                        android:textSize="14sp"
+                        android:fontFamily="monospace"
+                        android:textColor="@color/WhiteSecondShade"
+                        />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
-
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:layout_collapseMode="pin" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                >
-
-                <TextView
-                    android:id="@+id/tvUserName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-condensed"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:textColor="@color/whiteFirstShade"
-                    />
-
-                <TextView
-                    android:id="@+id/tvScreenName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/userProfileTvScreenNameMarginLeft"
-                    android:layout_marginStart="@dimen/userProfileTvScreenNameMarginLeft"
-                    android:textSize="14sp"
-                    android:fontFamily="monospace"
-                    android:textColor="@color/WhiteSecondShade"
-                    />
-
-            </LinearLayout>
-
-
-
-        </android.support.v7.widget.Toolbar>
 
 
     </android.support.design.widget.AppBarLayout>

@@ -23,8 +23,9 @@
 
 
     <style name="userProfileTextViews">
-        <item name="android:layout_below">@id/ivBackgroundImage</item>
+        <item name="android:layout_below">@id/tvDescription</item>
         <item name="android:layout_marginTop">6dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
 
@@ -37,6 +38,12 @@
     <style name="userProfileFollowLabelTextViews" parent="userProfileTextViews">
         <item name="android:textColor">@color/WhiteSecondShade</item>
         <item name="android:layout_marginLeft">4dp</item>
+    </style>
+
+    <style name="CustomActionBar" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:windowActionBarOverlay">true</item>
+        <!-- Support library compatibility -->
+        <item name="windowActionBarOverlay">true</item>
     </style>
 
 </resources>
